@@ -10,9 +10,14 @@
   "author": "Ben Fawcett",
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.27.0",
     "mongoose": "^5.9.25",
-    "sequelize": "^6.3.3"
+    "mysql2": "^2.1.0",
+    "sequelize": "^6.3.3",
+    "uuid": "^8.3.0"
   }
 }

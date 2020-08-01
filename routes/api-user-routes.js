@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const userControllers = require("../controllers/user-controllers");
+const userControllers = require("../controllers/user-controllers.js");
 const {authenticateUser, checkAdmin} = require("../controllers/middlewear/check-auth-middlewear");
 
 
@@ -25,7 +25,7 @@ router.get("/", authenticateUser, userControllers.getAuthenticatedUser);
 //Change password route
 router.put("/password", authenticateUser, userControllers.updatePassword);
 
-
+router.put("/makecreator", authenticateUser, userControllers.makeEventCreator);
 
 
 
