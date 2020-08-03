@@ -27,15 +27,15 @@ const EventBox = ({ event }) => {
                 setError(response.error);
                 return console.log(response.error)
             };
-
+            hideModal();
             console.log(response);
         })
     }
 
-    const time = moment(event.time).format("ddd Mo MMM YYYY")
+    const time = moment(event.start_date).format("ddd Mo MMM YYYY")
     return (
         <div className="column is-4">
-            <div className="card">
+            <div className="card event-card">
                 <div className="card-image">
                     <figure className="image is-4by3">
                         <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image" />
@@ -59,7 +59,7 @@ const EventBox = ({ event }) => {
                             <strong>{time}</strong>
                         </p>
                     </div>
-                    <div className="level">
+                    <div className="level event-buttons">
                         <button className="button is-primary" onClick={showModal}>Purchase</button>
                         <button className="button is-info">Info</button>
                     </div>

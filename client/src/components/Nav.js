@@ -22,9 +22,9 @@ const Nav = (props) => {
     return (
         <nav className="navbar" role="navigation" aria-label="main navigation">
             <div className="navbar-brand">
-                <a className="navbar-item">
+                <span className="navbar-item is-size-4">
                     HashTicket
-                </a>
+                </span>
 
                 <a role="button" className="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
                     <span aria-hidden="true"></span>
@@ -44,14 +44,14 @@ const Nav = (props) => {
                         Events
                     </Link>
 
+                    <Link to="/market" className="navbar-item">
+                        Market
+                    </Link>
+
                     {user.id? <Link to="/profile" className="navbar-item">
                         Profile
                     </Link>: null}
                     
-
-                    <a className="navbar-item">
-                        Documentation
-                    </a>
                 </div>
 
                 <div className="navbar-end">
