@@ -65,7 +65,6 @@ const getUserById = (id) => {
 const getAllUserTransactions = (id) => {
     return new Promise((resolve, reject) => {
         return getUserById(id).then(user => {
-            console.log(user.transactions);
             return resolve(user.transactions)
         }).catch(error => {
             return reject("Error getting user transactions")

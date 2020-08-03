@@ -169,8 +169,6 @@ module.exports = {
 
         db.User.findOne({ where: { id: req.user.id } }).then(result => {
 
-            console.log(result);
-
             //If values in token don't match the data from database return an error
             if (result.dataValues.id !== req.user.id || result.dataValues.email !== req.user.email) return res.status(404).json({ error: "Could not get details of user" });
 

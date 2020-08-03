@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
+import * as API from '../api/api'
 import EventBox from '../components/EventBox';
 
 const Events = () => {
@@ -64,6 +65,25 @@ const Events = () => {
         ]
     )
 
+    const [searchTerm, setSearchTerm] = useState("");
+    const searchInput = useRef();
+
+    useEffect(() => {
+        API.getEvents().then(response => {
+            if (response.error) return console.log(response.error);
+            setEvents(response.events)
+        })
+    }, [])
+
+    const applySearch = () => {
+        setSearchTerm(searchInput.current.value)
+    }
+
+    const resetFilters = () => {
+        setSearchTerm("");
+        searchInput.current.value = "";
+    }
+
     return (
         <div>
             <div className="section hero-bg-gradient">
@@ -81,12 +101,15 @@ const Events = () => {
                     <div className="level-right">
                         <div className="field has-addons">
                             <div className="control">
-                                <input className="input" type="text" placeholder="Find an event" />
+                                <input className="input" type="text" placeholder="Find an event" ref={searchInput} />
                             </div>
                             <div className="control">
-                                <a className="button is-info">
+                                <button className="button is-info" onClick={applySearch}>
                                     Search
-                            </a>
+                            </button>
+                                <button className="button is-danger" onClick={resetFilters}>
+                                    Reset
+                            </button>
                             </div>
                         </div>
                     </div>
@@ -94,7 +117,7 @@ const Events = () => {
 
                 <div className="section has-background-white mt-3">
                     <div className="columns is-multiline">
-                        {events.map(event => <EventBox event={event} key={event.id} />)}
+                        {events.filter(event => event.name.toLowerCase().includes(searchTerm)).map(event => <EventBox event={event} key={event.id} />)}
 
                     </div>
                 </div>

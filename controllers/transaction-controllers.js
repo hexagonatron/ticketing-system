@@ -9,12 +9,14 @@ const db = require("../models");
 
 const { getUserById, getUserBalance, userBalanceTransaction, getAllUserTransactions } = require('./helpers/user-helpers');
 
-const {formatTransactions} = require('./helpers/transaction-helpers');
+const { formatTransactions } = require('./helpers/transaction-helpers');
 
 module.exports = {
     addBalance(req, res) {
 
         const { amount } = req.body;
+
+        if(!amount) return res.status(400).json({error: "Bad Balance amount"})
 
         const transactionUserId = (req.query.id && req.user.role === 'admin')
             ? req.query.id
@@ -33,6 +35,8 @@ module.exports = {
     },
     withdrawBalance(req, res) {
         const { amount } = req.body;
+
+        if(!amount) return res.status(400).json({error: "Bad Balance amount"})
 
         const transactionUserId = (req.query.id && req.user.role === 'admin')
             ? req.query.id
@@ -63,16 +67,16 @@ module.exports = {
         })
 
     },
-    getAllTransactions(req, res){
+    getAllTransactions(req, res) {
         const userId = req.user.id;
 
         return getAllUserTransactions(userId).then(transactions => {
-            let transactionJson = "test"; 
+            let transactionJson = "test";
             transactionJson = formatTransactions(transactions);
 
-            return res.status(200).json({transactions: transactionJson})
+            return res.status(200).json({ transactions: transactionJson })
         }).catch(error => {
-            return res.status(500).json({error: error});
+            return res.status(500).json({ error: error });
         })
     }
 }

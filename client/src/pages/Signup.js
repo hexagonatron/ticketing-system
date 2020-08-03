@@ -1,12 +1,33 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import serialize from 'form-serialize';
+import { useHistory } from 'react-router-dom';
+
+import * as API from '../api/api'
+
+import { UserContext } from '../utils/UserContext';
+import Error from '../components/Error';
 
 const Signup = () => {
 
+    const [user, setUser] = useContext(UserContext)
+
+    let history = useHistory();
+    const [error, setError] = useState("");
+
     const signupHandler = (e) => {
         e.preventDefault();
-        const formData = serialize(e.target, {hash: true});
+        const formData = serialize(e.target, { hash: true });
         console.log(formData);
+        API.signup(formData).then(response => {
+            if (response.error) {
+                setError(response.error);
+                return console.log(response.error)
+            }
+
+            setUser(response);
+            history.push("/events")
+
+        })
     }
 
     return (
@@ -52,7 +73,7 @@ const Signup = () => {
                         <div className="field">
                             <label className="label">Confirm Password</label>
                             <div className="control">
-                                <input name="confirmpassword" className="input" type="password"/>
+                                <input name="confirmpassword" className="input" type="password" />
                             </div>
                         </div>
 
@@ -62,6 +83,8 @@ const Signup = () => {
                                 <input name="dob" className="input" type="date" />
                             </div>
                         </div>
+                        
+                        <Error error={error} />
 
                         <div className="field is-grouped">
                             <div className="control">

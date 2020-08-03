@@ -1,8 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
+
+import { Link } from 'react-router-dom'
+
+import { UserContext } from '../utils/UserContext';
 
 const Nav = (props) => {
 
+    const [user, setUser] = useContext(UserContext);
+
     const toggleLoginModal = props.toggleLoginModal;
+
+    const logoutHandler = () => {
+        setUser({
+            id: "",
+            email: "",
+            role: "",
+            token: ""
+        })
+    }
 
     return (
         <nav className="navbar" role="navigation" aria-label="main navigation">
@@ -20,47 +35,40 @@ const Nav = (props) => {
 
             <div id="navbarBasicExample" className="navbar-menu">
                 <div className="navbar-start">
-                    <a className="navbar-item">
+
+                    <Link to="/events" className="navbar-item">
                         Home
-                    </a>
+                    </Link>
+
+                    <Link to="/events" className="navbar-item">
+                        Events
+                    </Link>
+
+                    {user.id? <Link to="/profile" className="navbar-item">
+                        Profile
+                    </Link>: null}
+                    
 
                     <a className="navbar-item">
                         Documentation
                     </a>
-
-                    <div className="navbar-item has-dropdown is-hoverable">
-                        <a className="navbar-link">
-                            More
-                        </a>
-
-                        <div className="navbar-dropdown">
-                            <a className="navbar-item">
-                                About
-                            </a>
-                            <a className="navbar-item">
-                                Jobs
-                            </a>
-                            <a className="navbar-item">
-                                Contact
-                            </a>
-                            <hr className="navbar-divider" />
-                            <a className="navbar-item">
-                                Report an issue
-                            </a>
-                        </div>
-                    </div>
                 </div>
 
                 <div className="navbar-end">
                     <div className="navbar-item">
-                        <div className="buttons">
-                            <button className="button is-primary">
+                        {!user.token ? <div className="buttons">
+                            <Link className="button is-primary" to={"/signup"}>
                                 <strong>Sign up</strong>
-                            </button>
-                            <button className="button is-secondary" onClick={() => toggleLoginModal(true)}>
+                            </Link>
+                            <button className="button is-info" onClick={() => toggleLoginModal(true)}>
                                 <strong>Login</strong>
                             </button>
                         </div>
+                            : <div className="buttons">
+                                <button className="button is-danger" onClick={logoutHandler}>
+                                    <strong>Logout</strong>
+                                </button>
+                            </div>}
                     </div>
                 </div>
             </div>
