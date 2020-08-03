@@ -14,9 +14,12 @@ router.post("/balance/add", authenticateUser, transactionControllers.addBalance)
 router.post("/balance/withdraw", authenticateUser, transactionControllers.withdrawBalance);
 
 //Get balance
-router.get("/balance/", authenticateUser, transactionControllers.getBalance);
+router.get("/balance", authenticateUser, transactionControllers.getBalance);
 
-//Purchase ticket
+//Get all transactions
+router.get("/all", authenticateUser, transactionControllers.getAllTransactions);
+
+
 
 
 

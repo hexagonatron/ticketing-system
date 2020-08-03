@@ -7,7 +7,9 @@ const { Op } = require('sequelize');
 //Local dependancies
 const db = require("../models");
 
-const { getUserById, getUserBalance, userBalanceTransaction } = require('./helpers/user-helpers');
+const { getUserById, getUserBalance, userBalanceTransaction, getAllUserTransactions } = require('./helpers/user-helpers');
+
+const {formatTransactions} = require('./helpers/transaction-helpers');
 
 module.exports = {
     addBalance(req, res) {
@@ -60,5 +62,17 @@ module.exports = {
             })
         })
 
+    },
+    getAllTransactions(req, res){
+        const userId = req.user.id;
+
+        return getAllUserTransactions(userId).then(transactions => {
+            let transactionJson = "test"; 
+            transactionJson = formatTransactions(transactions);
+
+            return res.status(200).json({transactions: transactionJson})
+        }).catch(error => {
+            return res.status(500).json({error: error});
+        })
     }
 }

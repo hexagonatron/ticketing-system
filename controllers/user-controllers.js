@@ -273,15 +273,5 @@ module.exports = {
         }).catch(error => {
             return res.status(500).json({ error: "Error while trying to make event creator" })
         })
-    },
-    getAllTicketsAuthedUser(req, res) {
-        const userId = req.user.id;
-
-        getUserById(userId).then(user => {
-            console.log(user);
-            return res.status(200).json({user_id: user.id, tickets: "thing"})
-        }).catch(error => {
-            return res.status(500).json({error: error})
-        })
     }
 }

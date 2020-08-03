@@ -2,6 +2,7 @@ const { v4: uuidv4 } = require('uuid');
 const moment = require('moment');
 
 const db = require("../../models");
+const { models } = require('mongoose');
 
 
 //takes balance change amount + user obj
@@ -52,10 +53,22 @@ const getUserBalance = (user) => {
 
 const getUserById = (id) => {
     return new Promise((resolve, reject) => {
-        db.User.findOne({ where: { id }, include: ['admin_events', 'created_events', 'tickets', 'transactions'] }).then(user => {
+        db.User.findOne({ where: { id }, include: ['admin_events', 'created_events', 'tickets', 'transactions'],order: [[{model: models.Transaction}, 'timestamp','ASC']] }).then(user => {
             return resolve(user);
         }).catch(error => {
+            console.log(error);
             return reject("User not found");
+        })
+    })
+}
+
+const getAllUserTransactions = (id) => {
+    return new Promise((resolve, reject) => {
+        return getUserById(id).then(user => {
+            console.log(user.transactions);
+            return resolve(user.transactions)
+        }).catch(error => {
+            return reject("Error getting user transactions")
         })
     })
 }
@@ -63,5 +76,6 @@ const getUserById = (id) => {
 module.exports = {
     userBalanceTransaction,
     getUserBalance,
-    getUserById
+    getUserById,
+    getAllUserTransactions
 }
