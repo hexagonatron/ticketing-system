@@ -40,6 +40,10 @@ function App() {
                 <Profile />
               </Route>
 
+              <Route path='/'>
+                <Events />
+              </Route>
+
             </Switch>
             <LoginModal modalVisible={loginModalVisible} toggleLoginModal={setLoginModal} />
           </div>
