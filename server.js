@@ -28,13 +28,13 @@ app.use("/api/transactions", transactionRoutes);
 app.use("/api/tickets", ticketRoutes);
 
 //Handle Prod
-// if(process.env.NODE_ENV === 'production'){
-//   //set static
-//   // Static directory
-//   app.use(express.static(path.join(__dirname, "dist")));
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
 
-//   app.get(/.*/, (req, res) => res.sendFile(path.join(__dirname, "/dist/index.html")));
-// }
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "./client/build/index.html"));
+});
 
 
 // Syncing our sequelize models and then starting our Express app
