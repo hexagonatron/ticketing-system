@@ -15,7 +15,7 @@ export const UserProvider = (props) => {
     useEffect(() => {
         const savedUser = JSON.parse(localStorage.getItem("user"))
 
-        if (savedUser.id) setUser(savedUser);
+        if (savedUser) setUser(savedUser);
     }, [])
 
 
