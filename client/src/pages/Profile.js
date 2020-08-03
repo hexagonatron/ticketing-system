@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import TransactionTable from '../components/TransactionTable'
 import TicketBlock from '../components/TicketBlock'
 
+import * as API from '../api/api'
+import {UserContext} from '../utils/UserContext'
+
 const Profile = () => {
 
-    const [user, setUser] = useState({
+    const [user, setUser] = useContext(UserContext);
+
+    const [userInfo, setUserInfo] = useState({
 
         id: "a091c4e6-9657-49e1-91d3-3e5d29b1d996",
         email: "ben@fawcett.xyz",
@@ -151,6 +156,13 @@ const Profile = () => {
         e.preventDefault();
     }
 
+    useEffect(() => {
+        console.log(user.token)
+        API.getBalance(user.token).then(response => {
+            console.log(response);
+        })
+    },[user])
+
     return (
         <div>
             <div className="section hero-bg-gradient">
@@ -172,23 +184,23 @@ const Profile = () => {
                             <div className="is-size-5 mt-3">
                                 <div className="columns">
                                     <div className="column is-6"><strong>Name:</strong></div>
-                                    <div className="column is-6">{user.first_name} {user.last_name}</div>
+                                    <div className="column is-6">{userInfo.first_name} {userInfo.last_name}</div>
                                 </div>
                                 <div className="columns">
                                     <div className="column is-6"><strong>Email:</strong></div>
-                                    <div className="column is-6">{user.email}</div>
+                                    <div className="column is-6">{userInfo.email}</div>
                                 </div>
                                 <div className="columns">
                                     <div className="column is-6"><strong>DOB:</strong></div>
-                                    <div className="column is-6">{user.dob}</div>
+                                    <div className="column is-6">{userInfo.dob}</div>
                                 </div>
                                 <div className="columns">
                                     <div className="column is-6"><strong>Roles:</strong></div>
                                     <div className="column is-6">
                                         Patron
-                                        {user.is_event_creator ? <p>Event Creator</p> : ""}
-                                        {user.is_event_admin ? <p>Event Admin</p> : ""}
-                                        {user.role === "admin" ? <p>Site Admin</p> : ""}
+                                        {userInfo.is_event_creator ? <p>Event Creator</p> : ""}
+                                        {userInfo.is_event_admin ? <p>Event Admin</p> : ""}
+                                        {userInfo.role === "admin" ? <p>Site Admin</p> : ""}
                                     </div>
                                 </div>
 

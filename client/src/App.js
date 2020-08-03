@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import 'bulma/css/bulma.css';
 import './App.css';
-import UserContext from "./utils/UserContext";
 import {
   BrowserRouter as Router,
   Switch,
   Route
 } from "react-router-dom";
+
+import {UserProvider} from './utils/UserContext';
 
 import Nav from './components/Nav';
 import LoginModal from './components/Login';
@@ -17,46 +18,33 @@ import Profile from './pages/Profile';
 
 function App() {
 
-  const [userState, setUserState] = useState({
-    user_id: "",
-    email: "",
-    token: "",
-    role: "",
-    setUser: (user) => {
-
-    },
-    logout: () => {
-
-    }
-  })
-
   const [loginModalVisible, setLoginModal] = useState(false);
 
   return (
     <div>
-      <UserContext.Provider value={userState}>
+      <UserProvider>
         <Router>
           <div className="has-background-grey-lighter main-content">
-            <Nav toggleLoginModal={setLoginModal}/>
+            <Nav toggleLoginModal={setLoginModal} />
 
             <Switch>
               <Route path='/events'>
-                <Events/>
+                <Events />
               </Route>
 
               <Route path='/signup'>
-                <Signup/>
+                <Signup />
               </Route>
 
               <Route path='/profile'>
-                <Profile/>
+                <Profile />
               </Route>
 
             </Switch>
-            <LoginModal modalVisible={loginModalVisible} toggleLoginModal={setLoginModal}/>
+            <LoginModal modalVisible={loginModalVisible} toggleLoginModal={setLoginModal} />
           </div>
         </Router>
-      </UserContext.Provider>
+      </UserProvider>
     </div>
   );
 }

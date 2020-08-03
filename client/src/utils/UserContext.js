@@ -1,18 +1,20 @@
-import React from "react";
+import React from 'react';
+import { createContext, useState } from "react";
 
-const DeveloperContext = React.createContext({
-  user_id: "",
-  email: "",
-  token: "",
-  role: "",
-  setUser: (user) => {
+export const UserContext = createContext();
 
-  },
-  logout: () => {
-      
-  }
+export const UserProvider = (props) => {
 
+    const [user, setUser] = useState({
+        user_id: "",
+        email: "",
+        token: "",
+        role: "",
+    })
 
-});
-
-export default DeveloperContext;
+    return (
+        <UserContext.Provider value={[user, setUser]}>
+            {props.children}
+        </UserContext.Provider>
+    );
+};
