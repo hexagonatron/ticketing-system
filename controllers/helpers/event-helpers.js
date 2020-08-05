@@ -7,11 +7,12 @@ const { getUserById, getUserBalance, userBalanceTransaction } = require('./user-
 
 const getEventById = (id) => {
     return new Promise((resolve, reject) => {
-        db.Event.findOne({ where: { id: id }, include: ['creator', 'tickets'] }).then(event => {
+        db.Event.findOne({ where: { id: id }, include: ['creator', 'tickets', 'listings'] }).then(event => {
+            if(!event) throw "Event not found"
             return resolve(event);
         }).catch(error => {
             console.log(error);
-            return reject("Event not found");
+            return reject(error);
         })
     })
 }

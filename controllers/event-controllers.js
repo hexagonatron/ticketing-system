@@ -7,7 +7,7 @@ const { Op } = require('sequelize');
 //Local dependancies
 const db = require("../models");
 
-const {createEvent} = require('./helpers/event-helpers');
+const { createEvent } = require('./helpers/event-helpers');
 
 const eventResponseFormatter = (eventArray, options = {}) => {
     const returnArray = eventArray.map((event) => formatOneEvent(event, options));
@@ -26,6 +26,7 @@ const formatOneEvent = ({
     venue_name,
     deleted,
     sold_out,
+    listings
 },
     options = {}
 ) => {
@@ -39,6 +40,10 @@ const formatOneEvent = ({
         venue_name,
         address,
         sold_out,
+    }
+
+    if(listings){
+        eventJson.has_listings = !!listings.length
     }
 
     if (options.creator) {
@@ -56,10 +61,11 @@ module.exports = {
         return createEvent(req.body, req.user.id).then(event => {
             return res.status(200).json(formatOneEvent(event, { creator: true }));
         }).catch(error => {
-            return res.status(500).json({error});
+            console.log(error)
+            return res.status(500).json({ error });
         })
 
-        
+
     },
     getAllCreatedEvents(req, res) {
 
@@ -67,7 +73,7 @@ module.exports = {
             ? req.query.id
             : req.user.id;
 
-        db.Event.findAll({ where: { created_by: createdByUserId } }).then(events => {
+        db.Event.findAll({ where: { created_by: createdByUserId }, include:[{all:true}] }).then(events => {
             const response = eventResponseFormatter(events, { creator: true });
 
             return res.status(200).json({ events: response });
@@ -77,11 +83,25 @@ module.exports = {
         })
     },
     getAllEvents(req, res) {
-        db.Event.findAll({ where: { start_date: { [Op.gte]: moment().toDate() }, deleted: false }, order: [['start_date', 'ASC']] }).then(events => {
-            const responseData = eventResponseFormatter(events);
+        db.Event.findAll(
+            {
+                where: {
+                    start_date: {
+                        [Op.gte]: moment().toDate()
+                    },
+                    deleted: false
+                },
+                order: [
+                    ['start_date', 'ASC']
+                ],
+                include:[
+                    {all: true}
+                ]
+            }).then(events => {
+                const responseData = eventResponseFormatter(events);
 
-            return res.status(200).json({ events: responseData });
-        })
+                return res.status(200).json({ events: responseData });
+            })
     },
     getOneEvent(req, res) {
         const eventId = req.params.id;
@@ -99,11 +119,11 @@ module.exports = {
 
         db.Event.findOne({ where: { id: eventId } }).then(event => {
             if (event.created_by === req.user.id || req.user.role === "admin") {
-                
+
                 event.deleted = true;
 
                 return event.save().then(deleteResults => {
-                    return res.status(200).json({ success: "Event successfully deleted."});
+                    return res.status(200).json({ success: "Event successfully deleted." });
                 });
             }
 
@@ -140,7 +160,7 @@ module.exports = {
                 event.sold_out = sold_out || event.sold_out;
 
                 return event.save().then(updatedEvent => {
-                    return res.status(200).json({ success: "Event successfully updated.", event: formatOneEvent(updatedEvent, {creator: true}) })
+                    return res.status(200).json({ success: "Event successfully updated.", event: formatOneEvent(updatedEvent, { creator: true }) })
                 });
             }
 

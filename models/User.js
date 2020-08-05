@@ -44,6 +44,13 @@ module.exports = (sequelize, DataTypes) => {
         as: 'transactions'
       })
 
+      User.hasMany(models.Market, {
+        foreignKey: {
+          field: 'lister_id'
+        },
+        as: 'listings'
+      })
+
     }
   };
 

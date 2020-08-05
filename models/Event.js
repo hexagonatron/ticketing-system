@@ -18,6 +18,14 @@ module.exports = (sequelize, DataTypes) => {
         },
         as: 'tickets'
       })
+
+      Event.hasMany(models.Market, {
+        foreignKey: {
+          field: 'event_id'
+        },
+        as: 'listings'
+      })
+
     }
   };
   Event.init({

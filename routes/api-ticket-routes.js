@@ -12,4 +12,7 @@ router.post("/purchase", authenticateUser, ticketControllers.purchaseTicket);
 //Get all tickets
 router.get("/all", authenticateUser, ticketControllers.getAllTicketsAuthedUser);
 
+//List ticket on marketplace
+router.post("/list", authenticateUser, ticketControllers.listTicketOnMarket);
+
 module.exports = router;

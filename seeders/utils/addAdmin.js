@@ -29,10 +29,35 @@ module.exports = () => {
         }).then(event => {
             return assignEventCreator(event, user).then(response => {
                 console.log("Event Created");
-                return userBalanceTransaction(10000, "Initial balance", user)
+                return userBalanceTransaction(100000, "Initial balance", user)
+            }).then(() => {
+                return db.Ticket.create({
+                    id: "3c778ff4-7e67-4c21-b907-fbe2497be622",
+                    description: "Test Ticket",
+                    secret_key: "8c120727-f273-4b4d-9b19-738c915d4f64",
+                }).then(ticket => {
+                    ticket.setOwner(user)
+                    ticket.setEvent(event)
+                })
             })
         })
     }).then(balance => {
         console.log("Balance added.")
+    }).then(() => {
+        return db.User.create({
+            id: "ebf147e3-fffd-46a7-8802-939d32e986aa",
+            email: "miles@davis.com",
+            password: "1234567890",
+            role: "user",
+            first_name: "Miles",
+            last_name: "Davis",
+            dob: "1926-05-26",
+            is_event_creator: false,
+            is_event_admin: false
+        }).then(user => {
+            console.log("Miles davis created")
+            return userBalanceTransaction(100000, "Initial balance", user)
+        })
+
     }).catch(error => console.log(error));
 }
