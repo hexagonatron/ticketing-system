@@ -27,7 +27,7 @@ module.exports = () => {
             address: "123 Fake St",
             capacity: "1100",
         }).then(event => {
-            return assignEventCreator(event, user).then(response => {
+            return assignEventCreator(event, user).then(() => event.addEvent_admins(user, {through:{id: "58dd871d-192e-4345-afc7-7a627e4c64f0"}})).then(response => {
                 console.log("Event Created");
                 return userBalanceTransaction(100000, "Initial balance", user)
             }).then(() => {

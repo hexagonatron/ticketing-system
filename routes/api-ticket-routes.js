@@ -15,4 +15,7 @@ router.get("/all", authenticateUser, ticketControllers.getAllTicketsAuthedUser);
 //List ticket on marketplace
 router.post("/list", authenticateUser, ticketControllers.listTicketOnMarket);
 
+//Get single ticket (Also serves as ticket refresh link)
+router.get("/", authenticateUser, ticketControllers.getOneTicket);
+
 module.exports = router;

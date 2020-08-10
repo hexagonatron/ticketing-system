@@ -12,6 +12,11 @@ module.exports = (sequelize, DataTypes) => {
         as: 'creator'
       })
 
+      Event.belongsToMany(models.User, {
+        through: 'EventAdmins',
+        as: 'event_admins'
+      })
+
       Event.hasMany(models.Ticket, {
         foreignKey: {
           field: 'event_id'

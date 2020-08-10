@@ -3,6 +3,7 @@ const moment = require('moment');
 const jwt = require('jsonwebtoken');
 
 const db = require("../../models");
+const { userBalanceTransaction } = require('./user-helpers');
 
 const createTicketJson = (ticket) => {
 
@@ -44,11 +45,11 @@ const getTicketById = (id) => {
     return new Promise((resolve, reject) => {
         db.Ticket.findOne({ where: { id }, include: ['event', 'owner', 'market'] }).then(ticket => {
 
-            if(!ticket) throw "Ticket not found"
+            if(!ticket) return reject("Ticket not found");
 
             return resolve(ticket);
         }).catch(error => {
-            return reject(error);
+            return reject("Error while getting ticket");
         })
     })
 }
@@ -87,10 +88,49 @@ const transferTicketOwnership = (ticket, user) => {
     })
 }
 
+const decodeTicketToken = (ticketToken) => {
+    try{
+        return jwt.decode(ticketToken, {json: true});
+    } catch (error) {
+        console.log(error);
+        throw "Ticket Token is corrupt";
+    }
+}
+
+const verifyTicketToken = (ticketToken, ticketSecret) => {
+    try{
+        return jwt.verify(ticketToken, ticketSecret)
+    }catch (error) {
+        if(error.message === "jwt expired") throw "Token has expired, please refresh";
+
+        throw "Ticket token is not valid";
+    }
+}
+
+const setTicketCheckedIn = (ticket) => {
+    ticket.checked_in = true;
+    ticket.checked_in_date = moment();
+
+    //Create user transaction
+    const transactionMessage = `Checked into ${ticket.event.name}`
+
+    return Promise.all([
+        ticket.save(),
+        userBalanceTransaction(0, transactionMessage, ticket.owner)
+    ]).then(([ticket, transaction]) => {
+        return transaction;
+    }).catch(error => {
+        throw "Error while trying to check in ticket"
+    })
+}
+
 module.exports = {
     createTicketJson,
     getTicketById,
     setTicketSaleState,
     transferTicketOwnership,
-    createTicketHash
+    createTicketHash,
+    verifyTicketToken,
+    decodeTicketToken,
+    setTicketCheckedIn
 }

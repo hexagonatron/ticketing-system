@@ -1,11 +1,3 @@
-//NPM Dependencies
-const jwt = require('jsonwebtoken');
-const { v4: uuidv4 } = require('uuid');
-const moment = require('moment');
-const { Op } = require('sequelize');
-
-//Local dependancies
-const db = require("../models");
 
 const {purchaseTicketToEvent} = require('./helpers/event-helpers');
 const {createTicketJson, getTicketById} =require('./helpers/ticket-helpers');
@@ -69,10 +61,12 @@ module.exports = {
                 return res.status(400).json({error: "Ticket already on market"});
             }
 
+            //Make sure ticket hasn't already been checked in
+            if(ticket.checked_in) return res.status(400).json({error: "You cannot list a ticket that has already been checked in"})
+
             //Create market listing
             return createMarketListing(ticket, list_price).then(({transaction, listing}) => {
                 
-                console.log("done")
                 const transactionJson = formatOneTransaction(transaction);
                 const listingJson = formatOneMarketListing(listing)
 
@@ -86,5 +80,23 @@ module.exports = {
         })
         
 
+    },
+    getOneTicket(req, res) {
+
+        const id = req.query.id;
+
+        return getTicketById(id).then(ticket => {
+            if(
+                (req.user.id != ticket.owner.id) && 
+                (req.user.role != "admin")
+                ) return res.status(500).json({error: "Error while trying to retrive ticket"});
+
+            createTicketJson(ticket).then(ticketJson => {
+                return res.status(200).json({ticket: ticketJson });
+            })
+
+        }).catch(error => {
+            return res.status(500).json({error: "Error while trying to retrive ticket"});
+        })
     }
 }

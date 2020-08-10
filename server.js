@@ -22,12 +22,15 @@ const eventRoutes = require("./routes/api-event-routes");
 const transactionRoutes = require("./routes/api-transaction-routes");
 const ticketRoutes = require("./routes/api-ticket-routes");
 const marketRoutes = require("./routes/api-market-routes");
+const checkinRoutes = require("./routes/api-checkin-routes");
+
 
 app.use("/api/users", userRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/tickets", ticketRoutes);
 app.use("/api/market", marketRoutes);
+app.use("/api/checkin", checkinRoutes);
 
 //Handle Prod
 if (process.env.NODE_ENV === "production") {
