@@ -1,3 +1,4 @@
+const moment = require('moment');
 
 const {purchaseTicketToEvent} = require('./helpers/event-helpers');
 const {createTicketJson, getTicketById} =require('./helpers/ticket-helpers');
@@ -27,8 +28,11 @@ module.exports = {
         getUserById(userId).then(user => {
             const tickets = user.tickets.map(ticket => createTicketJson(ticket));
 
+            
             Promise.all(tickets).then(tickets => {
-                return res.status(200).json({user_id: user.id, tickets: tickets});
+                const ticketsSorted = tickets.sort((a, b) => moment(a.event_start).diff(moment(b.event_start)))
+
+                return res.status(200).json({user_id: user.id, tickets: ticketsSorted});
             })
 
         }).catch(error => {

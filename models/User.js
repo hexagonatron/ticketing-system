@@ -94,7 +94,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'User',
   });
 
-  User.addHook("beforeSave", async function (user, options) {
+  User.addHook("beforeCreate", async function (user, options) {
     user.password = await hashPassword(user.password);
   });
 

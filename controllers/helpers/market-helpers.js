@@ -135,7 +135,7 @@ const processMarketSale = (listing_id, user_id) => {
                 return Promise.all([
                     //Create transactions for both users
                     userBalanceTransaction(price, sellerTransMessage, listing.lister),
-                    userBalanceTransaction(price, buyerTransMessage, user),
+                    userBalanceTransaction(-price, buyerTransMessage, user),
                     listing.save(),
                     listing.ticket.save(),
                     transferTicketOwnership(listing.ticket, user)

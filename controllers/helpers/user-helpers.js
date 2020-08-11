@@ -53,7 +53,20 @@ const getUserBalance = (user) => {
 
 const getUserById = (id) => {
     return new Promise((resolve, reject) => {
-        db.User.findOne({ where: { id }, include: ['admin_events', 'created_events', 'tickets', 'transactions'],order: [[{model: models.Transaction}, 'timestamp','ASC']] }).then(user => {
+        db.User.findOne({ 
+            where: { id }, 
+            include: [
+                'admin_events', 
+                'created_events', 
+                'tickets', 
+                'transactions'
+            ],
+            order: [
+                [
+                    {model: models.Transaction}, 'timestamp','ASC'
+                ],
+            ]
+        }).then(user => {
             if(!user) throw "User not found"
             return resolve(user);
         }).catch(error => {
