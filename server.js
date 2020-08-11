@@ -1,13 +1,15 @@
 //Dependencies
 var express = require('express');
-require ('dotenv').config();
+// require ('dotenv').config();
 
 const path = require('path');
 
 // Sets up the Express App
 var app = express();
 
-var PORT = process.env.PORT || 3001;
+var PORT = process.env.PORT;
+
+console.log(`Port is ${PORT}`)
 
 // Requiring our models for syncing
 var db = require("./models");
