@@ -31,7 +31,10 @@ const Profile = () => {
     })
 
     const [tickets, setTickets] = useState([])
-
+    const [refreshTickets, toggleRefreshTickets] = useState(false)
+    const triggerTicketRefresh = () => {
+        toggleRefreshTickets(!refreshTickets)
+    }
 
     const [transactions, setTransactions] = useState([])
 
@@ -39,7 +42,7 @@ const Profile = () => {
     const [balanceChange, triggerBalanceChange] = useState(true)
     
 
-    const balanceInput = useRef();
+    const balanceInput = useRef(null);
 
     const addFundsHandler = (e) => {
         e.preventDefault();
@@ -76,7 +79,7 @@ const Profile = () => {
             console.log(response);
             setTransactions(response.transactions)
         })
-    },[user, transactionChange])
+    },[user, transactionChange, refreshTickets])
 
     useEffect(() => {
         if(!user.token) return
@@ -85,7 +88,7 @@ const Profile = () => {
             console.log(response);
             setTickets(response.tickets)
         })
-    },[user])
+    },[user, refreshTickets])
 
     useEffect(() => {
         if(!user.token) return
@@ -143,7 +146,7 @@ const Profile = () => {
 
                         <div className="section has-background-white mb-5">
                             <h1 className="title has-text-centered">Your Tickets</h1>
-                            {tickets.map(ticket => <TicketBlock ticket={ticket} key={ticket.id}/>)}
+                            {tickets.map(ticket => <TicketBlock ticket={ticket} key={ticket.id} refreshTickets={triggerTicketRefresh}/>)}
                         </div>
 
                     </div>

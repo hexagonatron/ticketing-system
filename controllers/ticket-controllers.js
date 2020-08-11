@@ -1,15 +1,10 @@
-//NPM Dependencies
-const jwt = require('jsonwebtoken');
-const { v4: uuidv4 } = require('uuid');
 const moment = require('moment');
-const { Op } = require('sequelize');
-
-//Local dependancies
-const db = require("../models");
 
 const {purchaseTicketToEvent} = require('./helpers/event-helpers');
-const {createTicketJson} =require('./helpers/ticket-helpers');
+const {createTicketJson, getTicketById} =require('./helpers/ticket-helpers');
 const {getUserById} = require('./helpers/user-helpers');
+const {createMarketListing, formatOneMarketListing} = require('./helpers/market-helpers');
+const {formatOneTransaction} = require('./helpers/transaction-helpers');
 
 module.exports = {
     purchaseTicket(req, res) {
@@ -33,12 +28,79 @@ module.exports = {
         getUserById(userId).then(user => {
             const tickets = user.tickets.map(ticket => createTicketJson(ticket));
 
+            
             Promise.all(tickets).then(tickets => {
-                return res.status(200).json({user_id: user.id, tickets: tickets});
+                const ticketsSorted = tickets.sort((a, b) => moment(a.event_start).diff(moment(b.event_start)))
+
+                return res.status(200).json({user_id: user.id, tickets: ticketsSorted});
             })
 
         }).catch(error => {
             return res.status(500).json({error: error})
+        })
+    },
+    listTicketOnMarket(req, res) {
+        
+        const {id, list_price} = req.body;
+        
+        //make sure ticket provided
+        if(!id) return res.status(400).json({error: "No ticket provided"});
+
+        //Get ticket
+        return getTicketById(id).then(ticket => {
+            //Make sure they own ticket or are a super admin
+            if(
+                (
+                    (ticket.owner.id != req.user.id) ||
+                    (list_price > ticket.event.price)
+                ) &&
+                (req.user.role != "admin")
+
+            ){
+                return res.status(400).json({error: "Not able to list ticket"})
+            }
+
+            //Check to make sure not already on market
+            if(ticket.for_sale){
+                return res.status(400).json({error: "Ticket already on market"});
+            }
+
+            //Make sure ticket hasn't already been checked in
+            if(ticket.checked_in) return res.status(400).json({error: "You cannot list a ticket that has already been checked in"})
+
+            //Create market listing
+            return createMarketListing(ticket, list_price).then(({transaction, listing}) => {
+                
+                const transactionJson = formatOneTransaction(transaction);
+                const listingJson = formatOneMarketListing(listing)
+
+                return res.status(200).json({success: "Ticket listed successfully", transaction: transactionJson, listing: listingJson});
+            })
+
+
+        }).catch(error => {
+            console.log(error);
+            return res.status(500).json({error: error})
+        })
+        
+
+    },
+    getOneTicket(req, res) {
+
+        const id = req.query.id;
+
+        return getTicketById(id).then(ticket => {
+            if(
+                (req.user.id != ticket.owner.id) && 
+                (req.user.role != "admin")
+                ) return res.status(500).json({error: "Error while trying to retrive ticket"});
+
+            createTicketJson(ticket).then(ticketJson => {
+                return res.status(200).json({ticket: ticketJson });
+            })
+
+        }).catch(error => {
+            return res.status(500).json({error: "Error while trying to retrive ticket"});
         })
     }
 }

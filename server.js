@@ -21,11 +21,16 @@ const userRoutes = require("./routes/api-user-routes");
 const eventRoutes = require("./routes/api-event-routes");
 const transactionRoutes = require("./routes/api-transaction-routes");
 const ticketRoutes = require("./routes/api-ticket-routes");
+const marketRoutes = require("./routes/api-market-routes");
+const checkinRoutes = require("./routes/api-checkin-routes");
+
 
 app.use("/api/users", userRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/tickets", ticketRoutes);
+app.use("/api/market", marketRoutes);
+app.use("/api/checkin", checkinRoutes);
 
 //Handle Prod
 if (process.env.NODE_ENV === "production") {
@@ -38,9 +43,13 @@ app.get("*", (req, res) => {
 
 
 // Syncing our sequelize models and then starting our Express app
-db.sequelize.sync().then(function() {
+db.sequelize.sync({force: process.env.RESET|| false}).then(function() {
     app.listen(PORT, function() {
       console.log("App listening on PORT " + PORT);
-      // require("./seeders/utils/addAdmin")();
+      
+      if(process.env.RESET){
+        require("./seeders/utils/addAdmin")();
+      }
+
     });
   });

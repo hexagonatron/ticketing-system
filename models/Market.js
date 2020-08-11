@@ -5,12 +5,28 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Market extends Model {
     static associate(models) {
+      
       Market.belongsTo(models.Ticket, {
         foreignKey: {
           field: "ticket_id",
         },
         as: "ticket"
       })
+
+      Market.belongsTo(models.Event, {
+        foreignKey: {
+          field: "event_id",
+        },
+        as: "event"
+      })
+
+      Market.belongsTo(models.User, {
+        foreignKey: {
+          field: "lister_id",
+        },
+        as: "lister"
+      })
+
     }
   };
   Market.init({
@@ -27,7 +43,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE
     },
     active: {
-      type: DataTypes.BOOLEAN
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
     }
   }, {
     sequelize,

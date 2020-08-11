@@ -18,5 +18,6 @@ const formatOneTransaction = ({id, description, value, running_total, timestamp,
 }
 
 module.exports = {
-    formatTransactions
+    formatTransactions,
+    formatOneTransaction
 }

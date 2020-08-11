@@ -47,6 +47,10 @@ module.exports = (sequelize, DataTypes) => {
     checked_in_date: {
       type: DataTypes.DATE
     },
+    for_sale: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
   }, {
     sequelize,
     modelName: 'Ticket',

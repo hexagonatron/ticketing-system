@@ -8,8 +8,8 @@ module.exports = {
     "database": process.env.DBNAME,
     "host": process.env.DBHOST,
     "dialect": "mysql",
-    "operatorsAliases": false,
-    "port": process.env.DBPORT
+    "port": process.env.DBPORT,
+    "logging": false
   },
   "test": {
     "username": process.env.DBUSER,
@@ -17,8 +17,8 @@ module.exports = {
     "database": process.env.DBNAME,
     "host": process.env.DBHOST,
     "dialect": "mysql",
-    "operatorsAliases": false,
-    "port": process.env.DBPORT
+    "port": process.env.DBPORT,
+    "logging": false
   },
   "production": {
     "username": process.env.DBUSER,
@@ -26,7 +26,7 @@ module.exports = {
     "database": process.env.DBNAME,
     "host": process.env.DBHOST,
     "dialect": "mysql",
-    "operatorsAliases": false,
-    "port": process.env.DBPORT
+    "port": process.env.DBPORT,
+    "logging": false
   }
 }
