@@ -15,6 +15,7 @@ import LoginModal from './components/Login';
 import Events from './pages/Events';
 import Signup from './pages/Signup';
 import Profile from './pages/Profile';
+import Market from './pages/Market';
 
 function App() {
 
@@ -38,6 +39,10 @@ function App() {
 
               <Route path='/profile'>
                 <Profile />
+              </Route>
+
+              <Route path='/market'>
+                <Market />
               </Route>
 
               <Route path='/'>

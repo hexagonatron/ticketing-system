@@ -11,6 +11,37 @@
   align-items: center;
 }
 
+.control-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.price-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.button-container {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.listing-image-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.listing-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* .event-card {
   height: 100%;
 } */

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { Link } from 'react-router-dom'
 
@@ -7,6 +7,8 @@ import { UserContext } from '../utils/UserContext';
 const Nav = (props) => {
 
     const [user, setUser] = useContext(UserContext);
+
+    const [burgerState, setBurgerState] = useState(false);
 
     const toggleLoginModal = props.toggleLoginModal;
 
@@ -26,14 +28,14 @@ const Nav = (props) => {
                     HashTicket
                 </span>
 
-                <a role="button" className="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <a role="button" className="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navBarMenu" onClick={()=> setBurgerState(!burgerState)}>
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                 </a>
             </div>
 
-            <div id="navbarBasicExample" className="navbar-menu">
+            <div id="navBarMenu" className={`navbar-menu ${burgerState? "is-active":""}`}>
                 <div className="navbar-start">
 
                     <Link to="/events" className="navbar-item">

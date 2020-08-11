@@ -136,3 +136,70 @@ export const signup = (body) => {
         throw error;
     })
 }
+
+export const getListings = () => {
+    return queryApi('/api/market/all', 
+    {
+    }).then(response => {
+        return response
+    }).catch(error => {
+        console.log(error)
+        throw error;
+    })
+}
+
+export const purchaseMarketTicket = (token, listingId) => {
+    return queryApi('/api/market/purchase', {
+        headers: {
+            'authorization': `Bearer ${token}`,
+            'content-type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({id: listingId})
+    }).then(response => {
+        return response
+    }).catch(error => {
+        console.log(error)
+        throw error;
+    })
+}
+
+export const getEventInfo = (eventId) => {
+    return queryApi(`/api/events/${eventId}`).then(response => {
+        return response
+    }).catch(error => {
+        console.log(error)
+        throw(error);
+    })
+}
+
+export const listTicketOnMarket = (token, body) => {
+    return queryApi('/api/tickets/list', {
+        headers: {
+            'authorization': `Bearer ${token}`,
+            'content-type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify(body)
+    }).then(response => {
+        return response
+    }).catch(error => {
+        console.log(error)
+        throw error
+    })
+}
+
+export const removeTicketFromMarket = (token, ticketId) => {
+    return queryApi(`/api/market/remove?id=${ticketId}`, {
+        headers: {
+            'authorization': `Bearer ${token}`,
+            'content-type': 'application/json'
+        },
+        method: 'DELETE'
+    }).then(response => {
+        return response
+    }).catch(error => {
+        console.log(error)
+        throw error
+    })
+}

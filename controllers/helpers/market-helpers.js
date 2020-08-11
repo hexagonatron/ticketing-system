@@ -69,6 +69,7 @@ const formatOneMarketListing = (listing) => {
         event_id: listing.event.id,
         event_name: listing.event.name,
         event_date: listing.event.start_date,
+        event_venue: listing.event.venue_name,
         ticket_description: listing.ticket.description
     }
     
@@ -123,8 +124,8 @@ const processMarketSale = (listing_id, user_id) => {
             return getUserBalance(user).then(balance => {
                 if((balance - price) < 0) return reject("Insufficient Funds");
 
-                const sellerTransMessage = `Sold a ticket to ${listing.event.name} for ${price} on market place to ${user.first_name}`
-                const buyerTransMessage = `Bought a ticket to ${listing.event.name} for ${price} from ${listing.lister.first_name}`;
+                const sellerTransMessage = `Sold a ticket to ${listing.event.name} for $${(price/100).toFixed(2)} on market place to ${user.first_name}`
+                const buyerTransMessage = `Bought a ticket to ${listing.event.name} for $${(price/100).toFixed(2)} from ${listing.lister.first_name}`;
 
                 //Set listing active to false
                 listing.active = false;

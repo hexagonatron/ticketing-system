@@ -24,6 +24,7 @@ const createTicketHash = (ticket) => {
         checked_in: ticket.checked_in,
         event_name: ticket.event.name,
         event_start: ticket.event.start_date,
+        event_venue: ticket.event.venue_name,
         for_sale: ticket.for_sale
     }
 
