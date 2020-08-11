@@ -43,12 +43,12 @@ app.get("*", (req, res) => {
 
 
 // Syncing our sequelize models and then starting our Express app
-db.sequelize.sync({force: process.env.RESET|| false}).then(function() {
+db.sequelize.sync().then(function() {
     app.listen(PORT, function() {
       console.log("App listening on PORT " + PORT);
       
       if(process.env.RESET){
-        require("./seeders/utils/addAdmin")();
+        // require("./seeders/utils/addAdmin")();
       }
 
     });
