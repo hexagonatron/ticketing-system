@@ -9,7 +9,6 @@ const app = express();
 
 const PORT = process.env.PORT || 3001;
 
-console.log(`Port is ${PORT}`)
 
 // Requiring our models for syncing
 const db = require("./models");
@@ -34,6 +33,9 @@ app.use("/api/tickets", ticketRoutes);
 app.use("/api/market", marketRoutes);
 app.use("/api/checkin", checkinRoutes);
 
+//Handle unfound api routes
+app.use("/api/*", (req, res) => res.status(404).json({error: "Invalid API route"}));
+
 //Handle Prod
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
@@ -45,12 +47,12 @@ app.get("*", (req, res) => {
 
 
 // Syncing our sequelize models and then starting our Express app
-db.sequelize.sync().then(function() {
+db.sequelize.sync({force: process.env.RESET || false}).then(function() {
     app.listen(PORT, function() {
       console.log("App listening on PORT " + PORT);
       
       if(process.env.RESET){
-        // require("./seeders/utils/addAdmin")();
+        require("./seeders/utils/addAdmin")();
       }
 
     });

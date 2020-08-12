@@ -203,3 +203,34 @@ export const removeTicketFromMarket = (token, ticketId) => {
         throw error
     })
 }
+
+export const changePassword = (token, body) => {
+    return queryApi(`/api/users/password`, {
+        headers: {
+            'authorization': `Bearer ${token}`,
+            'content-type': 'application/json'
+        },
+        method: 'PUT',
+        body: JSON.stringify(body)
+    }).then(response => {
+        return response
+    }).catch(error => {
+        console.log(error)
+        throw error
+    })
+}
+
+export const becomeEventCreator = token => {
+    return queryApi(`/api/users/makecreator`,{
+        headers: {
+            'authorization': `Bearer ${token}`,
+            'content-type': 'application/json'
+        },
+        method: 'PUT'
+    }).then(response => {
+        return response
+    }).catch(error => {
+        console.log(error)
+        throw error
+    })
+}

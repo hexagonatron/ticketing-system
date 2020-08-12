@@ -89,17 +89,21 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: "user"
     },
   },
-  {
-    sequelize,
-    modelName: 'User',
-  });
+    {
+      sequelize,
+      modelName: 'User',
+    });
 
-  User.addHook("beforeCreate", async function (user, options) {
-    user.password = await hashPassword(user.password);
+  User.addHook("beforeSave", async function (user, options) {
+    if(user.changed('password')){
+      user.password = await hashPassword(user.password);
+    }
   });
 
   User.addHook("beforeBulkUpdate", async function (user, options) {
-    user.password = await hashPassword(user.password);
+    if(user.changed('password')){
+      user.password = await hashPassword(user.password);
+    }
   });
 
   return User;
