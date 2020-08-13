@@ -70,6 +70,9 @@ module.exports = (sequelize, DataTypes) => {
     sold_out: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
+    },
+    image_url: {
+      type: DataTypes.STRING
     }
   }, {
     sequelize,

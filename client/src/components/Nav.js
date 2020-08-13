@@ -25,18 +25,22 @@ const Nav = (props) => {
     return (
         <nav className="navbar" role="navigation" aria-label="main navigation">
             <div className="navbar-brand">
+
+                <figure class="image is-64x64">
+                    <img src="/img/logo.png" />
+                </figure>
                 <span className="navbar-item is-size-4">
                     HashTicket
                 </span>
 
-                <a role="button" className="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navBarMenu" onClick={()=> setBurgerState(!burgerState)}>
+                <a role="button" className="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navBarMenu" onClick={() => setBurgerState(!burgerState)}>
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                 </a>
             </div>
 
-            <div id="navBarMenu" className={`navbar-menu ${burgerState? "is-active":""}`}>
+            <div id="navBarMenu" className={`navbar-menu ${burgerState ? "is-active" : ""}`}>
                 <div className="navbar-start">
 
                     <Link to="/events" className="navbar-item">
@@ -51,10 +55,10 @@ const Nav = (props) => {
                         Market
                     </Link>
 
-                    {user.id? <Link to="/profile" className="navbar-item">
+                    {user.id ? <Link to="/profile" className="navbar-item">
                         Profile
-                    </Link>: null}
-                    
+                    </Link> : null}
+
                 </div>
 
                 <div className="navbar-end">

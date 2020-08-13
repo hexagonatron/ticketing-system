@@ -68,6 +68,19 @@
   align-items: center;
 }
 
+.event-image {
+  max-height: 350px;
+  width: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.event-image > img {
+  object-fit: contain;
+  max-height: 350px;
+  width: auto;
+}
+
 /* .tab-list {
   border: none;
 } */
