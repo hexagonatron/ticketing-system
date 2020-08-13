@@ -7,7 +7,7 @@ import {
   Route
 } from "react-router-dom";
 
-import {UserProvider} from './utils/UserContext';
+import { UserProvider } from './utils/UserContext';
 
 import Nav from './components/Nav';
 import LoginModal from './components/Login';
@@ -16,6 +16,7 @@ import Events from './pages/Events';
 import Signup from './pages/Signup';
 import Profile from './pages/Profile';
 import Market from './pages/Market';
+import Checkin from './pages/Checkin';
 
 function App() {
 
@@ -25,10 +26,14 @@ function App() {
     <div>
       <UserProvider>
         <Router>
-          <div className="has-background-grey-lighter main-content">
-            <Nav toggleLoginModal={setLoginModal} />
 
-            <Switch>
+          <Switch>
+
+            <Route exact path='/checkin' component={Checkin} />
+
+            <div className="has-background-grey-lighter main-content">
+              <Nav toggleLoginModal={setLoginModal} />
+
               <Route path='/events'>
                 <Events />
               </Route>
@@ -45,13 +50,13 @@ function App() {
                 <Market />
               </Route>
 
-              <Route path='/'>
+              <Route exact path='/'>
                 <Events />
               </Route>
 
-            </Switch>
             <LoginModal modalVisible={loginModalVisible} toggleLoginModal={setLoginModal} />
-          </div>
+            </div>
+          </Switch>
         </Router>
       </UserProvider>
     </div>

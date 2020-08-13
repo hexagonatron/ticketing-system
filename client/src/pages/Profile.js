@@ -6,6 +6,7 @@ import serialize from 'form-serialize';
 import TransactionTable from '../components/TransactionTable'
 import TicketBlock from '../components/TicketBlock'
 import Error from '../components/Error';
+import EventBlock from '../components/EventBlock';
 
 import * as API from '../api/api'
 import { UserContext } from '../utils/UserContext'
@@ -47,6 +48,8 @@ const Profile = () => {
     const [tabState, setTabState] = useState("dashboard");
 
     const [changePasswordError, setChangePasswordError] = useState("");
+
+    const [adminEvents, setAdminEvents] = useState([]);
 
     const balanceInput = useRef(null);
 
@@ -105,17 +108,27 @@ const Profile = () => {
         })
     }, [user, updateUserInfo])
 
+    useEffect(() => {
+        if (userInfo.is_event_admin) {
+            API.getAdminEvents(user.token).then(response => {
+                if (response.error) return
+
+                return setAdminEvents(response.events);
+            })
+        }
+    }, [userInfo])
+
     const changePasswordHandler = (e) => {
         e.preventDefault();
         console.log(e.target);
-        
+
         const formData = serialize(e.target, { hash: true });
         console.log(formData);
-        
+
         e.target.reset();
 
         API.changePassword(user.token, formData).then(response => {
-            if(response.error){
+            if (response.error) {
                 console.log(response.error)
                 return setChangePasswordError(response.error)
             }
@@ -124,7 +137,7 @@ const Profile = () => {
 
     const becomeEventCreatorHandler = () => {
         API.becomeEventCreator(user.token).then(response => {
-            if(response.error){
+            if (response.error) {
                 return console.log(response.error);
             }
             setUpdateUserInfo(!updateUserInfo);
@@ -147,6 +160,9 @@ const Profile = () => {
                         <ul className="tab-list" style={{ border: "none" }}>
                             <li className={tabState === "dashboard" ? "is-active" : ""} onClick={() => setTabState("dashboard")}><a>Dashboard</a></li>
                             <li className={tabState === "settings" ? "is-active" : ""} onClick={() => setTabState("settings")}><a>Settings</a></li>
+                            {userInfo.is_event_admin
+                                ? <li className={tabState === "checkin" ? "is-active" : ""} onClick={() => setTabState("checkin")}><a>Checkin</a></li>
+                                : null}
                         </ul>
                     </div>
                 </div>
@@ -298,7 +314,7 @@ const Profile = () => {
                                                     <input class="input" name="confirmPassword" type="password" />
                                                 </div>
                                             </div>
-                                            <Error error={changePasswordError}/>
+                                            <Error error={changePasswordError} />
                                             <div class="field is-grouped is-grouped-centered">
                                                 <p class="control">
                                                     <button class="button is-info" type="submit">
@@ -317,7 +333,23 @@ const Profile = () => {
                                 </div>
                             </div>
                         )
-                        : ""}
+                        : tabState === "checkin"
+                            ? (
+                                <div className="columns mt-3">
+                                    <div className="column is-12">
+                                        <div className="section has-background-white mb-5 py-5 px-3">
+                                            <h1 className="title has-text-centered mb-3">Events Available for Checkin</h1>
+                                            <div className="pt-5">
+                                                {adminEvents.length ? adminEvents.map((event, i) => <EventBlock event={event} key={event.id} index={i} />)
+                                                    : <h3 className="is-size-4 has-text-centered">No events Available for Checkin</h3>}
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                            : ""}
             </div>
         </div>
     );

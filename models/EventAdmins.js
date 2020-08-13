@@ -15,7 +15,8 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     },
     role: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      defaultValue: "admin" 
     }
   }, {
     sequelize,

@@ -27,7 +27,6 @@ const createMarketListing = (ticket, list_price) => {
                 userBalanceTransaction(0, transactionMsg, ticket.owner)
             ])
         }).then(([listingTicket, listingOwner, listingEvent, ticket, {transaction}]) => {
-            console.log("done!")
             return getListingById(listingTicket.id).then(listing => {
                 return resolve({transaction, listing});
             })

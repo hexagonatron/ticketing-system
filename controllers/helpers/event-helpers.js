@@ -8,7 +8,7 @@ const { getUserById, getUserBalance, userBalanceTransaction } = require('./user-
 const getEventById = (id) => {
     return new Promise((resolve, reject) => {
         db.Event.findOne({ where: { id: id }, include: ['creator', 'tickets', 'listings'] }).then(event => {
-            if(!event) throw "Event not found"
+            if (!event) throw "Event not found"
             return resolve(event);
         }).catch(error => {
             console.log(error);
@@ -106,14 +106,14 @@ const createEvent = (eventParams, userId) => {
             db.User.findOne({ where: { id: userId } })
         ]).then(([event, user]) => {
 
-                return assignEventCreator(event, user).then(event => {
-                    return resolve(event);
-                })
-
-            }).catch(error => {
-                console.log(error);
-                return reject("Error while adding event");
+            return assignEventCreator(event, user).then(event => {
+                return resolve(event);
             })
+
+        }).catch(error => {
+            console.log(error);
+            return reject("Error while adding event");
+        })
     })
 }
 
@@ -125,10 +125,80 @@ const assignEventCreator = (event, user) => {
     })
 }
 
+const makeEventAdminProcessor = (event, user) => {
+    return new Promise((resolve, reject) => {
+        return event.addEvent_admins(user).then(event => {
+            console.log(event);
+            return resolve("Success");
+        }).catch(error => {
+            console.log(error);
+            return reject("Error assigning event Admin");
+        })
+    })
+}
+
+const makeEventAdmin = (userId, eventId, requestUserId) => {
+    return new Promise((resolve, reject) => {
+        return Promise.all([
+            getUserById(userId),
+            getEventById(eventId),
+            getUserById(requestUserId)
+        ]).then(([admin, event, requestor]) => {
+
+            //Check to make sure everything exists
+            if (!admin) return reject("Couldn't find user with supplied ID");
+            if (!event) return reject("Couldn't find event with supplied ID");
+            if (!requestor) return reject("Couldn't find user with supplied ID");
+
+            //Make sure requestor is the event owner or a global admin
+            if (
+                (event.creatorId != requestor.id) &&
+                (requestor.role != "admin")
+            ) return reject("You don't have permission to assign admins to this event");
+
+            admin.is_event_admin = true;
+
+            //Everything checks out so make the assignment
+            return Promise.all([
+                event.addEvent_admins(admin, { through: { id: uuidv4() } }),
+                admin.save()
+            ]).then(([event, admin]) => {
+                return resolve("Success");
+
+            }).catch(error => {
+                console.log(error)
+                return reject("Error while trying to add user as admin")
+            })
+
+        }).catch(error => {
+            console.log(error);
+            return reject("Error while trying to assign eventId")
+        })
+    })
+}
+
+const getAdminEventsForUser = (userId) => {
+
+    return new Promise((resolve, reject) => {
+        return getUserById(userId).then(user => {
+
+            if(!user.admin_events.length) return reject("User is not an admin for any events");
+            
+            return resolve(user.admin_events)
+
+        }).catch(error => {
+            return reject(error)
+        })
+
+    })
+}
+
 module.exports = {
     getEventById,
     createEventTicket,
     purchaseTicketToEvent,
     createEvent,
     assignEventCreator,
+    makeEventAdmin,
+    getAdminEventsForUser
 }

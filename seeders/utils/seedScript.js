@@ -1,5 +1,7 @@
 const fetch = require('node-fetch');
 const moment = require('moment');
+const fs = require('fs');
+const { resolve } = require('path');
 
 const base_url = "http://localhost:3001/api"
 
@@ -148,7 +150,28 @@ const events = [
     },
 ]
 
+const writeFile = (header, message) => {
+    
+    const data = `\n ${header} \n \n ${JSON.stringify(message,null,4)}`
+    
+    fs.appendFile('./output.txt', data, (err) => {
+        if(err) return reject(err);
+
+        return resolve();
+    })
+}
+const initFile = () => {
+    return new Promise ((resolve, reject) => {
+        fs.writeFile('./output.txt',"",(err) => {
+            return resolve();
+        })
+
+    })
+}
+
 async function main(){
+    initFile()
+
     let userResults = await Promise.all(users.map(user => {
         return fetch(`${base_url}/users/signup`, {
             headers: {
@@ -159,7 +182,9 @@ async function main(){
         }).then(response => response.json())
     }))
 
-    // console.log(userResults);
+    console.log("Users created");
+    await writeFile("User Results", userResults)
+    
     
     let balanceResults = await Promise.all(userResults.map(user => {
         return fetch(`${base_url}/transactions/balance/add`, {
@@ -171,13 +196,17 @@ async function main(){
             body: JSON.stringify({amount: 100000})
         }).then(response => response.json())
     }))
-    console.log(balanceResults);
+
+    console.log("User balances added");
+    await writeFile("Balance Transaction results", balanceResults)
     
     let slicenum = Math.floor(userResults.length/3);
     let creatorUsers = userResults.slice(0, slicenum);
     let patronUsers = userResults.slice(slicenum+1, userResults.length -1);
-    console.log(creatorUsers);
-    console.log(patronUsers);
+    await writeFile("Creator Users", creatorUsers)
+    await writeFile("Patron Users", patronUsers)
+    
+
     
     creatorRes = await Promise.all(creatorUsers.map(user => {
         return fetch(`${base_url}/users/makecreator`, {
@@ -188,7 +217,9 @@ async function main(){
             method: 'PUT',
         }).then(res => res.json())
     }));
-    console.log(creatorRes);
+
+    console.log("Users made creators");
+    await writeFile("Event Creator results", creatorRes)
     
     eventResults = await Promise.all(events.map(event => {
         const user = creatorUsers[Math.floor(Math.random() * creatorUsers.length)]
@@ -201,7 +232,8 @@ async function main(){
             body: JSON.stringify(event)
         }).then(res => res.json())
     }))
-    // console.log(eventResults);
+    console.log("Events created");
+    await writeFile("Created event results", eventResults)
     
     const ticketRes = await Promise.all(userResults.map(user => {
         return Promise.all([...Array(12)].map((val, i) => {
@@ -223,7 +255,8 @@ async function main(){
         }))
     }))
 
-    console.log(ticketRes);
+    console.log("Tickets purchased");
+    await writeFile("Ticket Purchasing results", ticketRes)
 
     const listRes = await Promise.all(userResults.map(user => {
         return fetch(`${base_url}/tickets/all`, {
@@ -246,7 +279,8 @@ async function main(){
         })
     }));
 
-    // console.log(listRes)
+    console.log("Tickets listed")
+    await writeFile("Ticket listing results", listRes)
 
     let listings = await fetch(`${base_url}/market/all`).then(res => res.json()).then(({listings}) => listings);
 
@@ -273,7 +307,8 @@ async function main(){
         })
     }))
 
-    console.log(buyRes);
+    console.log("Market Tickets bought");
+    await writeFile("Market Ticket buying results", buyRes)
 
 }
 

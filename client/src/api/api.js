@@ -234,3 +234,47 @@ export const becomeEventCreator = token => {
         throw error
     })
 }
+
+export const getAdminEvents = token => {
+    return queryApi('api/events/getadmin', {
+        headers: {
+            'authorization': `Bearer ${token}`,
+            'content-type': 'application/json'
+        },
+    }).then(response => {
+        return response
+    }).catch(error => {
+        console.log(error)
+        throw error
+    })
+}
+
+export const checkinTicket = (ticketToken, eventId, token) => {
+    return queryApi('api/checkin', {
+        method: 'POST',
+        headers: {
+            'authorization': `Bearer ${token}`,
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify({event_id: eventId, ticket_token: ticketToken})
+    }).then(response => {
+        return response
+    }).catch(error => {
+        console.log(error)
+        throw error
+    })
+}
+
+export const refreshTicket = (token, ticketId) => {
+    return queryApi(`api/tickets?id=${ticketId}`, {
+        headers: {
+            'authorization': `Bearer ${token}`,
+            'content-type': 'application/json'
+        }
+    }).then(response => {
+        return response
+    }).catch(error => {
+        console.log(error)
+        throw error
+    })
+}
