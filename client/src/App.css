@@ -48,6 +48,26 @@
   justify-content: space-between;
 }
 
+.checkin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.error-message {
+  border: red 10px solid;
+
+}
+
+.success-message {
+  border: green 10px solid;
+}
+
+.flex-v-center {
+  display: flex;
+  align-items: center;
+}
+
 /* .tab-list {
   border: none;
 } */

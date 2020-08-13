@@ -7,7 +7,8 @@ const { Op } = require('sequelize');
 //Local dependancies
 const db = require("../models");
 
-const { createEvent } = require('./helpers/event-helpers');
+const { createEvent, makeEventAdmin, getAdminEventsForUser } = require('./helpers/event-helpers');
+const { getUserById } = require('./helpers/user-helpers');
 
 const eventResponseFormatter = (eventArray, options = {}) => {
     const returnArray = eventArray.map((event) => formatOneEvent(event, options));
@@ -168,6 +169,27 @@ module.exports = {
 
         }).catch(error => {
             return res.status(500).json({ error: "Error updating event" })
+        })
+    },
+    makeEventAdminHandler(req, res) {
+        const {userId, eventId} = req.body;
+
+        return makeEventAdmin(userId, eventId, req.user.id).then(response => {
+            return res.status(200).json({success: "User successfully added as an event admin"});
+        }).catch(error => {
+            return res.status(500).json({error})
+        })
+    },
+    getAdminEventsHandler(req, res) {
+        const id = req.user.id
+
+        getAdminEventsForUser(id).then(events => {
+            const response = eventResponseFormatter(events)
+
+            return res.status(200).json({events: response});
+
+        }).catch(error => {
+            return res.status(500).json({error})
         })
     }
 }

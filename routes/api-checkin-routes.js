@@ -6,6 +6,7 @@ const {authenticateUser, checkAdmin, checkEventCreator} = require("../controller
 
 // ROOT URL = "/api/checkin"
 
+
 //Checkin a ticket
 router.post('/', authenticateUser, checkinControllers.checkinOneTicketHandler);
 

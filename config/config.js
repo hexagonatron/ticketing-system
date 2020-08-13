@@ -9,7 +9,7 @@ module.exports = {
     "host": process.env.DBHOST,
     "dialect": "mysql",
     "port": process.env.DBPORT,
-    "logging": true
+    "logging": false
   },
   "test": {
     "username": process.env.DBUSER,
@@ -27,6 +27,6 @@ module.exports = {
     "host": process.env.DBHOST,
     "dialect": "mysql",
     "port": process.env.DBPORT,
-    "logging": true
+    "logging": false
   }
 }

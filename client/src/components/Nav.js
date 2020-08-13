@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 
 import { UserContext } from '../utils/UserContext';
 
@@ -19,6 +19,7 @@ const Nav = (props) => {
             role: "",
             token: ""
         })
+        props.history.push('/')
     }
 
     return (
@@ -78,4 +79,4 @@ const Nav = (props) => {
     );
 };
 
-export default Nav;
+export default withRouter(Nav);

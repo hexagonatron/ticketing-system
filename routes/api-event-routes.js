@@ -22,6 +22,10 @@ router.delete("/delete/:id", authenticateUser, checkEventCreator, eventControlle
 //Edit single event info
 router.put("/edit/:id", authenticateUser, checkEventCreator, eventControllers.editOneEvent);
 
+//Assign a user as an event admin
+router.post("/assignadmin", authenticateUser, eventControllers.makeEventAdminHandler)
+
+router.get("/getadmin", authenticateUser, eventControllers.getAdminEventsHandler)
 
 //Get single event info
 router.get("/:id", eventControllers.getOneEvent);

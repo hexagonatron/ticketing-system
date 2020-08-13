@@ -39,7 +39,7 @@ const createTicketToken = (ticket) => {
         event_id: ticket.eventId,
         id: ticket.id
     }
-    return jwt.sign(identifier, ticket.secret_key, { expiresIn: '5m'});
+    return jwt.sign(identifier, ticket.secret_key, { expiresIn: '30s'});
 }
 
 const getTicketById = (id) => {
