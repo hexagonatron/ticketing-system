@@ -39,8 +39,8 @@ const ListingBlock = (props) => {
                 <div className="columns is-mobile">
 
                     <div className="column is-2 listing-image-container">
-                        <figure class="image is-128x128 listing-image">
-                            <img src="https://bulma.io/images/placeholders/128x128.png" />
+                        <figure class="listing-image">
+                            <img src={props.listing.image_url} />
                         </figure>
                     </div>
 

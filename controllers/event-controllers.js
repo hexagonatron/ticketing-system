@@ -27,7 +27,8 @@ const formatOneEvent = ({
     venue_name,
     deleted,
     sold_out,
-    listings
+    listings,
+    image_url
 },
     options = {}
 ) => {
@@ -41,6 +42,7 @@ const formatOneEvent = ({
         venue_name,
         address,
         sold_out,
+        image_url
     }
 
     if(listings){

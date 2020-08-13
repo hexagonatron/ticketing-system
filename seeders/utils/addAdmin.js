@@ -26,6 +26,7 @@ module.exports = () => {
             venue_name: "The Pit",
             address: "123 Fake St",
             capacity: "1100",
+            image_url: "https://i.imgur.com/RK81Jld.jpg"
         }).then(event => {
             return assignEventCreator(event, user).then(() => event.addEvent_admins(user, {through:{id: "58dd871d-192e-4345-afc7-7a627e4c64f0"}})).then(response => {
                 console.log("Event Created");

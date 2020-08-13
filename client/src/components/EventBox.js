@@ -36,10 +36,10 @@ const EventBox = ({ event }) => {
     return (
         <div className="column is-4">
             <div className="card event-card">
-                <div className="card-image">
-                    <figure className="image is-4by3">
-                        <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image" />
-                    </figure>
+                <div className="event-image px-5 pt-4">
+
+                    <img src={event.image_url} alt="Placeholder image" />
+
                 </div>
                 <div className="card-content">
                     <div className="media">

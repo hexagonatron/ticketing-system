@@ -69,7 +69,8 @@ const formatOneMarketListing = (listing) => {
         event_name: listing.event.name,
         event_date: listing.event.start_date,
         event_venue: listing.event.venue_name,
-        ticket_description: listing.ticket.description
+        ticket_description: listing.ticket.description,
+        image_url: listing.event.image_url
     }
     
 }

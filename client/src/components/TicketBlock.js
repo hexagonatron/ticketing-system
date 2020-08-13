@@ -124,16 +124,21 @@ const TicketBlock = ({ ticket, refreshTickets }) => {
                 </div>
                 <div className="column is-6">
                     <h1 className="title is-5 has-text-centered">{ticket.event_name}</h1>
-                    <div style={{ display: 'flex', justifyContent: 'center' }}>
 
-                        {!ticket.for_sale
+                    {ticket.checked_in
+                    ? <div><p className="has-text-centered"> Ticket has been checked in</p></div>
+                    : null }
+                    <div className="mt-3" style={{ display: 'flex', justifyContent: 'center' }}>
+
+                        {ticket.checked_in ? null : 
+
+                        !ticket.for_sale
                             ? <button className="button is-primary mr-3" onClick={() => setListModalState(true)}>
                                 Sell
                         </button>
                             : <button className="button is-danger mr-3" onClick={() => setRemoveListModalState(true)}>
                                 Cancel Sale
-                        </button>
-                        }
+                        </button>}
 
                         <button className="button is-primary" onClick={() => setModalState(true)}>View</button>
                     </div>

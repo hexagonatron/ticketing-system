@@ -96,6 +96,73 @@ const users = [
     },
 ]
 
+const demoUsers = [
+    {
+        email: "elvis@presly.com",
+        password: "1234567890Aa",
+        confirmpassword: "1234567890Aa",
+        first_name: "Elvis",
+        last_name: "Presley",
+        dob: "1935-01-08"
+    },
+    {
+        email: "johnny@cash.com",
+        password: "1234567890Aa",
+        confirmpassword: "1234567890Aa",
+        first_name: "Johnny",
+        last_name: "Cash",
+        dob: "1940-07-07"
+    },
+    {
+        email: "david@bowie.com",
+        password: "1234567890Aa",
+        confirmpassword: "1234567890Aa",
+        first_name: "David",
+        last_name: "Bowie",
+        dob: "1940-07-07"
+    },
+    {
+        email: "bob@dylan.com",
+        password: "1234567890Aa",
+        confirmpassword: "1234567890Aa",
+        first_name: "Bob",
+        last_name: "Dylan",
+        dob: "1940-07-07"
+    },
+    {
+        email: "freddie@mercury.com",
+        password: "1234567890Aa",
+        confirmpassword: "1234567890Aa",
+        first_name: "Freddie",
+        last_name: "Mercury",
+        dob: "1940-07-07"
+    },
+    {
+        email: "ludwig@beethoven.com",
+        password: "1234567890Aa",
+        confirmpassword: "1234567890Aa",
+        first_name: "Ludwig",
+        last_name: "Beethoven",
+        dob: "1940-07-07"
+    },
+    {
+        email: "ozzy@osbourne.com",
+        password: "1234567890Aa",
+        confirmpassword: "1234567890Aa",
+        first_name: "Ozzy",
+        last_name: "Osbourne",
+        dob: "1940-07-07"
+    },
+    {
+        email: "stevie@wonder.com",
+        password: "1234567890Aa",
+        confirmpassword: "1234567890Aa",
+        first_name: "Stevie",
+        last_name: "Wonder",
+        dob: "1940-07-07"
+    },
+]
+
 
 const events = [
     {
@@ -107,6 +174,7 @@ const events = [
         capacity: 20 + Math.floor(Math.random() * 1000),
         venue_name: "Adelaide Oval",
         address: "123 Oval st, Adelaide",
+        image_url: "https://i.imgur.com/UBuLLOh.jpg"
     },
     {
         name:"The Festival of the Loud Noise",
@@ -117,6 +185,7 @@ const events = [
         capacity: 20 + Math.floor(Math.random() * 1000),
         venue_name: "The Gov",
         address: "11 Port Rd, Hindmarsh",
+        image_url: "https://i.imgur.com/7GN5H0d.jpg"
     },
     {
         name:"Jazz Weekend 2020",
@@ -127,6 +196,7 @@ const events = [
         capacity: 20 + Math.floor(Math.random() * 1000),
         venue_name: "The Lounge",
         address: "123 Easy St, Harlem",
+        image_url: "https://i.imgur.com/m2wbkqI.jpg"
     },
     {
         name:"CoranaFest",
@@ -137,6 +207,7 @@ const events = [
         capacity: 20 + Math.floor(Math.random() * 1000),
         venue_name: "Royal Adelaide Hospital",
         address: "Isolation ward, 123 Hospital st, Melbourne",
+        image_url: "https://i.imgur.com/MEbaQ60.jpg"
     },
     {
         name:"The return of The Beatles",
@@ -147,6 +218,7 @@ const events = [
         capacity: 20 + Math.floor(Math.random() * 1000),
         venue_name: "The Rooftop",
         address: "66 Rooftop Rd, Adelaide",
+        image_url: "https://i.imgur.com/gpKBO7e.jpg"
     },
 ]
 
@@ -182,8 +254,19 @@ async function main(){
         }).then(response => response.json())
     }))
 
+    let demoUserResults = await Promise.all(demoUsers.map(user => {
+        return fetch(`${base_url}/users/signup`, {
+            headers: {
+                'content-type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(user)
+        }).then(response => response.json())
+    }))
+
     console.log("Users created");
     await writeFile("User Results", userResults)
+    await writeFile("Demo User Results", demoUserResults)
     
     
     let balanceResults = await Promise.all(userResults.map(user => {
@@ -272,7 +355,7 @@ async function main(){
                         'authorization': `Bearer ${user.token}`
                     },
                     method: "POST",
-                    body: JSON.stringify({id: ticket.id, list_price: Math.floor(Math.random() * 49)*100})
+                    body: JSON.stringify({id: ticket.id, list_price: Math.ceil(Math.random() * 49)*100})
                 }).then(res => res.json())
             }))
             

@@ -14,12 +14,12 @@ const EventBlock = (props) => {
                 <div className="columns">
 
                     <div className="column is-2 listing-image-container">
-                        <figure class="image is-128x128 listing-image">
-                            <img src="https://bulma.io/images/placeholders/128x128.png" />
+                        <figure class="listing-image">
+                            <img src={props.event.image_url} />
                         </figure>
                     </div>
 
-                    <div className="column is-3 flex-v-center">
+                    <div className="column is-2 flex-v-center">
                         <h2 className="has-text-centered">
                             <p>
                                 {dateStr}
@@ -36,7 +36,7 @@ const EventBlock = (props) => {
                         </h1>
                     </div>
 
-                    <div className="column is-2 flex-v-center">
+                    <div className="column is-3 flex-v-center pr-3" style={{display:'flex', justifyContent:'center'}}>
                         <Link to={{ pathname: "/checkin", state: { event: props.event } }} className="button is-info">
                             Launch Checkin
                         </Link>

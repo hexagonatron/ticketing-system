@@ -79,7 +79,8 @@ const createEvent = (eventParams, userId) => {
             start_date,
             capacity,
             venue_name,
-            address
+            address,
+            image_url
         } = eventParams;
 
         if (
@@ -101,7 +102,8 @@ const createEvent = (eventParams, userId) => {
                 start_date,
                 capacity,
                 venue_name,
-                address
+                address,
+                image_url
             }),
             db.User.findOne({ where: { id: userId } })
         ]).then(([event, user]) => {
