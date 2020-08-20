@@ -3,7 +3,7 @@ An event ticketing system using react.
 
 View the deployed version
 
-https://hash-ticket.herokuapp.com/profile
+https://hash-ticket.herokuapp.com/
 
 View the pitch/demonstration:
 
