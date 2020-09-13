@@ -18,7 +18,7 @@
     "moment": "^2.27.0",
     "mongoose": "^5.9.25",
     "mysql2": "^2.1.0",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "sequelize": "^6.3.3",
     "uuid": "^8.3.0"
   }
