@@ -21,12 +21,9 @@ module.exports = {
     "logging": false
   },
   "production": {
-    "username": process.env.DBUSER,
-    "password": process.env.DBPASSWORD,
+    "use_env_variable": "JAWSDB_URL",
     "database": process.env.DBNAME,
-    "host": process.env.DBHOST,
     "dialect": "mysql",
-    "port": process.env.DBPORT,
     "logging": false
   }
 }
